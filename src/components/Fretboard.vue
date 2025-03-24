@@ -11,6 +11,7 @@
         :x="width"
         :y="height + 20"
         fill="gray"
+
         dominant-baseline="hanging"
         text-anchor="end"
       >
@@ -301,10 +302,14 @@ export default {
       }
     },
     toname(x) {
-      return Midi.midiToNoteName(x, {
-        sharps: this.sharps,
-        pitchClass: true,
-      });
+      if (this.sharps == "pc") {
+        return Midi.pcset([x])[0];
+      } else {
+        return Midi.midiToNoteName(x, {
+          sharps: this.sharps,
+          pitchClass: true,
+        });
+      }
     },
     normalize(notes) {
       return notes.map((x) => x % 12);

@@ -350,7 +350,7 @@ const FORTE_NUMBERS = [
   "10-5",
   "10-6",
   "11-1",
-  "12-1"
-]
+  "12-1",
+];
 
-export default FORTE_NUMBERS
+export default FORTE_NUMBERS;

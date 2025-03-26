@@ -281,7 +281,7 @@ export default {
       scale: { tonic: "A", type: "minor pentatonic" },
       chord: { root: "A", type: "minor" },
       inputNotes: "",
-      pcSet: "9 0 4",
+      pcSet: "",
       primeForm: "",
       normalForm: "",
       T: "0",
@@ -415,8 +415,16 @@ export default {
   },
 
   watch: {
+    mode: function () {
+      if (this.mode === "pc-set") {
+        if (this.pcSet !== null && this.pcSet !== undefined) {
+          this.pcSet = "9 0 4";
+        }
+      }
+    },
     pcSet: {
       handler: function () {
+        if (this.mode !== "pc-set") return;
         if (!this.updatePostTonalData) return;
         this.updatePostTonalData = false;
         const address = Object.values(this.music21Chord.chordTablesAddress);
@@ -505,7 +513,6 @@ export default {
     isInverted: function () {
       if (!this.updatePostTonalData) return;
       this.updatePostTonalData = false;
-      console.log(this.isInverted, this.isInvertible);
       const address = this.getChordAddress(this.music21Chord);
       address[2] = this.inversionInteger;
       const normalForm = this.getNormalForm(address);

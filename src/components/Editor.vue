@@ -280,7 +280,7 @@ export default {
       frets: 18,
       scale: { tonic: "A", type: "minor pentatonic" },
       chord: { root: "A", type: "minor" },
-      inputNotes: "",
+      inputNotes: "A C E",
       pcSet: "",
       primeForm: "",
       normalForm: "",

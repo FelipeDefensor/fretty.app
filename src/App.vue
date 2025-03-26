@@ -12,13 +12,11 @@
 
 <script>
 import Editor from "./components/Editor.vue";
-// import NoteSelect from "./components/NoteSelect.vue";
 
 export default {
   name: "App",
   components: {
     Editor,
-    // NoteSelect
   },
   data() {
     return {

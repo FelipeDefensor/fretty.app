@@ -50,7 +50,6 @@
         {
           "ignores": [
             "Editor",
-            "Embed",
             "Fretboard"
           ]
         }

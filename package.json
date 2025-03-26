@@ -51,8 +51,7 @@
           "ignores": [
             "Editor",
             "Embed",
-            "Fretboard",
-            "Tuning"
+            "Fretboard"
           ]
         }
       ]

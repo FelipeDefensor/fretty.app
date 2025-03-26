@@ -167,8 +167,8 @@ export default {
       default: 18,
     },
     sharps: {
-      type: Boolean,
-      default: true, // TODO: "sharps", "flats" or "interval"
+      type: String,
+      default: "sharps",
     },
   },
 

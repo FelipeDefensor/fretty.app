@@ -281,7 +281,7 @@ export default {
       scale: { tonic: "A", type: "minor pentatonic" },
       chord: { root: "A", type: "minor" },
       inputNotes: "",
-      pcSet: "3 6 7",
+      pcSet: "9 0 4",
       primeForm: "",
       normalForm: "",
       T: "0",
@@ -289,7 +289,7 @@ export default {
       isInvertible: true,
       forteNumber: "",
       updatePostTonalData: true,
-      mode: "pc-set",
+      mode: "scale",
     };
   },
 

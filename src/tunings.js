@@ -54,7 +54,7 @@ export const Tunings = Object.freeze([
       { name: "Ostrich", tuning: "D D D D D D" },
       { name: "Capo 20", tuning: "C G D D# D D#" },
       { name: "Balalaika", tuning: "E A D E E A" },
-      { name: "Charango", tuning: " G C E A E" },
+      { name: "Charango", tuning: "G C E A E" },
       { name: "Cittern One", tuning: "C F C G C D" },
       { name: "Cittern Two", tuning: "C G C G C G" },
       { name: "Dobro Open G", tuning: "G B D G B D" },

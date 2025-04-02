@@ -17,12 +17,10 @@
             style="min-width: 350px"
             @input="saveSettings"
           >
-            <template slot-scope="props">
-              <div style="display: flex">
-                <div style="flex: 1 1 0px">{{ props.option.name }}</div>
-                <div style="flex: 1 1 0px">{{ props.option.tuning }}</div>
-              </div>
-            </template>
+            <div slot-scope="props" style="display: flex">
+              <div style="flex: 1 1 0px">{{ props.option.name }}</div>
+              <div style="flex: 1 1 0px">{{ props.option.tuning }}</div>
+            </div>
           </b-autocomplete>
         </b-field>
       </div>
@@ -30,126 +28,126 @@
       <div class="column">
         <!-- Mode-dependent fields -->
 
-        <template v-if="mode === 'scale'">
-          <div class="columns" style="max-width: 400px">
-            <div class="column is-3">
-              <b-field label="Tonic">
-                <b-input v-model="scale.tonic" icon="music"></b-input>
-              </b-field>
-            </div>
-            <div class="column">
-              <b-field label="Scale">
-                <b-autocomplete
-                  v-model="scale.type"
-                  :data="set_search"
-                  open-on-focus
-                  clearable
-                  append-to-body
-                  @select="(option) => (selected = option)"
-                ></b-autocomplete>
-              </b-field>
-            </div>
+        <div v-if="mode === 'scale'" class="columns" style="max-width: 400px">
+          <div class="column is-3">
+            <b-field label="Tonic">
+              <b-input v-model="scale.tonic" icon="music"></b-input>
+            </b-field>
           </div>
-        </template>
-
-        <template v-else-if="mode === 'chord'">
-          <div class="columns" style="max-width: 400px">
-            <div class="column is-3">
-              <b-field label="Root">
-                <b-input v-model="chord.root" icon="music"></b-input>
-              </b-field>
-            </div>
-            <div class="column">
-              <b-field label="Type">
-                <b-autocomplete
-                  v-model="chord.type"
-                  :data="set_search"
-                  open-on-focus
-                  clearable
-                  append-to-body
-                  @select="(option) => (selected = option)"
-                ></b-autocomplete>
-              </b-field>
-            </div>
+          <div class="column">
+            <b-field label="Scale">
+              <b-autocomplete
+                v-model="scale.type"
+                :data="set_search"
+                open-on-focus
+                clearable
+                append-to-body
+                @select="(option) => (selected = option)"
+              ></b-autocomplete>
+            </b-field>
           </div>
-        </template>
+        </div>
 
-        <template v-else-if="mode === 'notes'">
-          <b-field label="Notes">
-            <b-input
-              v-model="inputNotes"
-              style="max-width: 400px"
-              icon="music"
-            ></b-input>
-          </b-field>
-        </template>
+        <div
+          v-else-if="mode === 'chord'"
+          class="columns"
+          style="max-width: 400px"
+        >
+          <div class="column is-3">
+            <b-field label="Root">
+              <b-input v-model="chord.root" icon="music"></b-input>
+            </b-field>
+          </div>
+          <div class="column">
+            <b-field label="Type">
+              <b-autocomplete
+                v-model="chord.type"
+                :data="set_search"
+                open-on-focus
+                clearable
+                append-to-body
+                @select="(option) => (selected = option)"
+              ></b-autocomplete>
+            </b-field>
+          </div>
+        </div>
 
-        <template v-else-if="mode === 'pc-set'">
-          <div class="columns has-3-cols is-multiline" style="max-width: 400px">
-            <div class="column is-two-thirds">
-              <b-field label="Set" :label-position="'on-border'">
-                <b-input v-model="pcSet"></b-input>
-              </b-field>
-            </div>
-            <div class="column is-one-third">
-              <b-field label="Forte nº" :label-position="'on-border'">
-                <b-autocomplete
-                  v-model="forteNumber"
-                  :data="set_search"
-                  open-on-focus
-                  clearable
-                  append-to-body
-                  @select="(option) => (selected = option)"
-                ></b-autocomplete>
-              </b-field>
-            </div>
-            <div class="column is-4">
-              <b-field label="Prime form" :label-position="'on-border'">
-                <b-input v-model="primeForm"></b-input>
-              </b-field>
-            </div>
+        <b-field v-else-if="mode === 'notes'" label="Notes">
+          <b-input
+            v-model="inputNotes"
+            style="max-width: 400px"
+            icon="music"
+          ></b-input>
+        </b-field>
 
-            <div class="column is-4">
-              <b-field label="Normal form" :label-position="'on-border'">
-                <b-input v-model="normalForm" readonly></b-input>
-              </b-field>
-            </div>
+        <div
+          v-else-if="mode === 'pc-set'"
+          class="columns has-3-cols is-multiline"
+          style="max-width: 400px"
+        >
+          <div class="column is-two-thirds">
+            <b-field label="Set" :label-position="'on-border'">
+              <b-input v-model="pcSet"></b-input>
+            </b-field>
+          </div>
+          <div class="column is-one-third">
+            <b-field label="Forte nº" :label-position="'on-border'">
+              <b-autocomplete
+                v-model="forteNumber"
+                :data="set_search"
+                open-on-focus
+                clearable
+                append-to-body
+                @select="(option) => (selected = option)"
+              ></b-autocomplete>
+            </b-field>
+          </div>
+          <div class="column is-4">
+            <b-field label="Prime form" :label-position="'on-border'">
+              <b-input v-model="primeForm"></b-input>
+            </b-field>
+          </div>
 
-            <div class="column is-2">
-              <b-field label="T" :label-position="'on-border'">
-                <b-input v-model="T"></b-input>
-              </b-field>
-            </div>
+          <div class="column is-4">
+            <b-field label="Normal form" :label-position="'on-border'">
+              <b-input v-model="normalForm" readonly></b-input>
+            </b-field>
+          </div>
 
-            <div
-              class="column is-2 has-text-centered"
-              style="
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                margin-top: -19px;
-                margin-left: -8px;
+          <div class="column is-2">
+            <b-field label="T" :label-position="'on-border'">
+              <b-input v-model="T"></b-input>
+            </b-field>
+          </div>
+
+          <div
+            class="column is-2 has-text-centered"
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              margin-top: -19px;
+              margin-left: -8px;
+            "
+          >
+            <label
+              class="checkbox"
+              :disabled="!isInvertible"
+              :title="
+                isInvertible
+                  ? ''
+                  : 'Set has inversional symmetry, cannot invert.'
               "
             >
-              <label
-                class="checkbox"
+              <span class="label is-small">Invert</span>
+              <input
+                type="checkbox"
+                v-model="isInverted"
                 :disabled="!isInvertible"
-                :title="
-                  isInvertible
-                    ? ''
-                    : 'Set has inversional symmetry, cannot invert.'
-                "
-              >
-                <span class="label is-small">Invert</span>
-                <input
-                  type="checkbox"
-                  v-model="isInverted"
-                  :disabled="!isInvertible"
-                />
-              </label>
-            </div>
+              />
+            </label>
           </div>
-        </template>
+        </div>
       </div>
 
       <!-- Settings -->

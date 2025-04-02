@@ -1,5 +1,12 @@
 <template>
-  <div style="display: flex; flex-direction: column; align-items: center">
+  <div
+    style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    "
+  >
     <div class="columns is-multiline is-centered" style="max-width: 980px">
       <div class="column">
         <!-- Tuning -->
@@ -174,7 +181,7 @@
                     <b-field label="Frets">
                       <b-numberinput
                         controls-position="compact"
-                        v-model.number="frets"
+                        v-model.number="fretAmount"
                         min="1"
                         max="200"
                       ></b-numberinput>
@@ -238,15 +245,26 @@
       </div>
     </div>
 
-    <div class="card-image" style="text-align: center; overflow-x: auto">
+    <div style="text-align: center; overflow-x: auto">
       <Fretboard
         :tuning="tuning"
+        :emphasize="emphasized_notes"
         :notes="notes"
         :sharps="sharps"
-        :frets="frets"
-        :root="root"
+        :frets="fretAmount"
       />
     </div>
+    <template>
+      <div v-if="mode != 'scale'">
+        <ChordDiagrams
+          :notes="notes"
+          :tuning="tuning"
+          :fretAmount="fretAmount"
+          :onChordBoxHover="onChordboxHover"
+          :onChordBoxLeave="onChordboxLeave"
+        />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -255,8 +273,8 @@ import Fretboard from "./Fretboard.vue";
 import { Note, Scale, Midi, ScaleType, Chord, ChordType } from "@tonaljs/tonal";
 import { Tunings } from "../tunings.js";
 import FORTE_NUMBERS from "../forte_numbers.js";
-// eslint-disable-next-line
 import * as music21j from "music21j";
+import ChordDiagrams from "../ChordDiagrams.vue";
 
 var ALL_SCALES = [];
 for (var scale of ScaleType.all()) {
@@ -269,13 +287,14 @@ export default {
 
   components: {
     Fretboard,
+    ChordDiagrams,
   },
 
   data: function () {
     return {
       usr_tuning: localStorage.getItem("tuning") || "E A D G B E",
       sharps: "sharps",
-      frets: 18,
+      fretAmount: 18,
       scale: { tonic: "A", type: "minor pentatonic" },
       chord: { root: "A", type: "minor" },
       inputNotes: "A C E",
@@ -288,9 +307,9 @@ export default {
       forteNumber: "",
       updatePostTonalData: true,
       mode: "scale",
+      hoveredShape: null,
     };
   },
-
   computed: {
     tuning: function () {
       if (!this.usr_tuning) return [];
@@ -311,7 +330,23 @@ export default {
           return null;
       }
     },
-
+    emphasized_notes: function () {
+      if (this.mode == "scale") {
+        return {
+          type: "pitch-class",
+          data: this.root,
+        };
+      } else {
+        if (!this.hoveredShape) return null;
+        return {
+          type: "frets",
+          data: this.hoveredShape
+            .slice()
+            .reverse()
+            .map((x) => [x]),
+        };
+      }
+    },
     music21Chord: function () {
       if (this.mode != "pc-set") return null;
 
@@ -528,6 +563,13 @@ export default {
   },
 
   methods: {
+    onChordboxHover(shape) {
+      this.hoveredShape = shape;
+    },
+
+    onChordboxLeave() {
+      this.hoveredShape = null;
+    },
     getInvCheckboxState(inv) {
       /**
        * Returns a pair [enabled, checked] representing the state of the
@@ -599,6 +641,3 @@ export default {
   },
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>

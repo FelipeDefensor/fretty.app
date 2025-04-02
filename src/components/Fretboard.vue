@@ -67,7 +67,7 @@
         <!-- hidden notes -->
         <g v-for="note in string.hidden" :key="note.key">
           <transition name="fade">
-            <g v-show="note.num == hover_note">
+            <g v-show="note.pitchClass == hover_note">
               <!-- circle -->
               <circle
                 :cx="note.x"
@@ -92,7 +92,7 @@
           </transition>
           <circle
             @mouseleave="hover_note = -1"
-            @mouseover="hover_note = note.num"
+            @mouseover="hover_note = note.pitchClass"
             r="10"
             :cx="note.x"
             :cy="string.y"
@@ -108,10 +108,12 @@
               :cx="note.x"
               :cy="string.y"
               r="10"
-              :stroke-dasharray="
-                hover_note == note.num && note.num != root ? '4,4' : '0'
+              :stroke-dasharray="hover_note == note.pitchClass ? '4,4' : '0'"
+              :fill="
+                shouldEmphasize(string.nr, note.fret, note.pitchClass)
+                  ? 'black'
+                  : 'white'
               "
-              :fill="root == note.num ? 'black' : 'white'"
               stroke="black"
             />
             <!-- name -->
@@ -120,15 +122,23 @@
               :x="note.x"
               :y="string.y"
               dominant-baseline="central"
-              :fill="root == note.num ? 'white' : 'black'"
-              :font-weight="root == note.num ? 'bold' : 'normal'"
+              :fill="
+                shouldEmphasize(string.nr, note.fret, note.pitchClass)
+                  ? 'white'
+                  : 'black'
+              "
+              :font-weight="
+                shouldEmphasize(string.nr, note.fret, note.pitchClass)
+                  ? 'bold'
+                  : 'normal'
+              "
               text-anchor="middle"
             >
               {{ note.name }}
             </text>
             <circle
               @mouseleave="hover_note = -1"
-              @mouseover="hover_note = note.num"
+              @mouseover="hover_note = note.pitchClass"
               r="10"
               :cx="note.x"
               :cy="string.y"
@@ -159,8 +169,9 @@ export default {
     inlays: {
       default: () => [3, 5, 7, 9, 12, 15, 17, 19, 21],
     },
-    root: {
-      type: Number,
+    emphasize: {
+      type: Object,
+      default: null,
     },
     frets: {
       type: Number,
@@ -194,15 +205,15 @@ export default {
         let visible = [];
         let hidden = [];
         for (let fret = 0; fret < this.frets; fret++) {
-          let num = (tuning + fret) % 12;
+          let pitchClass = (tuning + fret) % 12;
           let note = {
-            num: num,
+            pitchClass: pitchClass,
             fret: fret,
-            name: this.toname(num),
+            name: this.toname(pitchClass),
             x: (this.fretpos(fret - 1) + this.fretpos(fret)) / 2,
             key: "n" + string + "_" + fret,
           };
-          if (normalized_notes.includes(num)) {
+          if (normalized_notes.includes(pitchClass)) {
             visible.push(note);
           } else {
             hidden.push(note);
@@ -313,6 +324,14 @@ export default {
     },
     normalize(notes) {
       return notes.map((x) => x % 12);
+    },
+    shouldEmphasize(stringNumber, fret, pitchClass) {
+      if (!this.emphasize) return false;
+      if (this.emphasize.type == "frets") {
+        return this.emphasize.data[stringNumber].includes(fret);
+      } else {
+        return this.emphasize.data == pitchClass;
+      }
     },
   },
 };

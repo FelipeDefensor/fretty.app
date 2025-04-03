@@ -154,6 +154,11 @@
 <script>
 import { Midi } from "@tonaljs/tonal";
 
+// The following has removes all "Loading instrument..."
+// divs only if done on this particular module.
+// Don't know why.
+window.m21conf = { loadSoundfont: false };
+
 export default {
   name: "Fretboard",
 

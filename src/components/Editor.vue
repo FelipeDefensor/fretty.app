@@ -190,6 +190,19 @@
                         max="200"
                       ></b-numberinput>
                     </b-field>
+
+                    <b-field label="Show inlays">
+                      <b-field>
+                        <b-radio-button v-model="showInlays" native-value="yes">
+                          <span>Yes</span>
+                        </b-radio-button>
+
+                        <b-radio-button v-model="showInlays" native-value="no">
+                          <span>No</span>
+                        </b-radio-button>
+                      </b-field>
+                    </b-field>
+
                     <b-field label="Notation">
                       <b-field>
                         <b-radio-button v-model="sharps" native-value="sharps">
@@ -265,6 +278,7 @@
         :notes="notes"
         :sharps="sharps"
         :frets="fretAmount"
+        :showInlays="showInlays"
       />
     </div>
     <div v-if="inputMode != 'scale'">
@@ -306,6 +320,7 @@ export default {
       usr_tuning: localStorage.getItem("tuning") || "E A D G B E",
       sharps: "sharps",
       fretAmount: 18,
+      showInlays: "yes",
       scale: { tonic: "A", type: "minor pentatonic" },
       chord: { root: "A", type: "minor" },
       inputNotes: "A C E",

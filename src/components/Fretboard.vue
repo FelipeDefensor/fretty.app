@@ -174,6 +174,10 @@ export default {
     inlays: {
       default: () => [3, 5, 7, 9, 12, 15, 17, 19, 21],
     },
+    showInlays: {
+      type: String,
+      default: "yes",
+    },
     emphasize: {
       type: Object,
       default: null,
@@ -251,6 +255,7 @@ export default {
       };
     },
     inlay_polys: function () {
+      if (this.showInlays == "no") return [];
       let result = [];
       if (!this.tuning.length) return result;
       for (let fret of this.inlays) {

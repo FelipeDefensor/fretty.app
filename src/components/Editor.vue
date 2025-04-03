@@ -35,7 +35,11 @@
       <div class="column">
         <!-- Mode-dependent fields -->
 
-        <div v-if="mode === 'scale'" class="columns" style="max-width: 400px">
+        <div
+          v-if="inputMode === 'scale'"
+          class="columns"
+          style="max-width: 400px"
+        >
           <div class="column is-3">
             <b-field label="Tonic">
               <b-input v-model="scale.tonic" icon="music"></b-input>
@@ -56,7 +60,7 @@
         </div>
 
         <div
-          v-else-if="mode === 'chord'"
+          v-else-if="inputMode === 'chord'"
           class="columns"
           style="max-width: 400px"
         >
@@ -79,7 +83,7 @@
           </div>
         </div>
 
-        <b-field v-else-if="mode === 'notes'" label="Notes">
+        <b-field v-else-if="inputMode === 'notes'" label="Notes">
           <b-input
             v-model="inputNotes"
             style="max-width: 400px"
@@ -88,7 +92,7 @@
         </b-field>
 
         <div
-          v-else-if="mode === 'pc-set'"
+          v-else-if="inputMode === 'pc-set'"
           class="columns has-3-cols is-multiline"
           style="max-width: 400px"
         >
@@ -205,21 +209,30 @@
                       <b-field>
                         <div class="columns is-gapless">
                           <div class="column">
-                            <b-radio-button v-model="mode" native-value="scale">
+                            <b-radio-button
+                              v-model="inputMode"
+                              native-value="scale"
+                            >
                               <span>scale</span>
                             </b-radio-button>
 
-                            <b-radio-button v-model="mode" native-value="chord">
+                            <b-radio-button
+                              v-model="inputMode"
+                              native-value="chord"
+                            >
                               <span>chord</span>
                             </b-radio-button>
                           </div>
                           <div class="column">
-                            <b-radio-button v-model="mode" native-value="notes">
+                            <b-radio-button
+                              v-model="inputMode"
+                              native-value="notes"
+                            >
                               <span>notes</span>
                             </b-radio-button>
 
                             <b-radio-button
-                              v-model="mode"
+                              v-model="inputMode"
                               native-value="pc-set"
                             >
                               <span>PC set</span>
@@ -254,17 +267,15 @@
         :frets="fretAmount"
       />
     </div>
-    <template>
-      <div v-if="mode != 'scale'">
-        <ChordDiagrams
-          :notes="notes"
-          :tuning="tuning"
-          :fretAmount="fretAmount"
-          :onChordBoxHover="onChordboxHover"
-          :onChordBoxLeave="onChordboxLeave"
-        />
-      </div>
-    </template>
+    <div v-if="inputMode != 'scale'">
+      <ChordDiagrams
+        :notes="notes"
+        :tuning="tuning"
+        :fretAmount="fretAmount"
+        :onChordBoxHover="onChordboxHover"
+        :onChordBoxLeave="onChordboxLeave"
+      />
+    </div>
   </div>
 </template>
 
@@ -298,6 +309,7 @@ export default {
       scale: { tonic: "A", type: "minor pentatonic" },
       chord: { root: "A", type: "minor" },
       inputNotes: "A C E",
+      inputMode: "chord",
       pcSet: "",
       primeForm: "",
       normalForm: "",
@@ -306,7 +318,6 @@ export default {
       isInvertible: true,
       forteNumber: "",
       updatePostTonalData: true,
-      mode: "scale",
       hoveredShape: null,
     };
   },
@@ -316,7 +327,7 @@ export default {
       return this.usr_tuning.trim().split(" ").map(Note.chroma).reverse();
     },
     root: function () {
-      switch (this.mode) {
+      switch (this.inputMode) {
         case "scale":
           return Note.chroma(this.scale.tonic);
         case "chord":
@@ -326,12 +337,12 @@ export default {
         case "pc-set":
           return null;
         default:
-          console.error("unknown mode: " + this.mode);
+          console.error("unknown mode: " + this.inputMode);
           return null;
       }
     },
     emphasized_notes: function () {
-      if (this.mode == "scale") {
+      if (this.inputMode == "scale") {
         return {
           type: "pitch-class",
           data: this.root,
@@ -348,7 +359,7 @@ export default {
       }
     },
     music21Chord: function () {
-      if (this.mode != "pc-set") return null;
+      if (this.inputMode != "pc-set") return null;
 
       let pitchClasses = this.pcSet.trim().split(" ").map(Number);
 
@@ -361,7 +372,7 @@ export default {
     },
     notes: function () {
       let notes = [];
-      switch (this.mode) {
+      switch (this.inputMode) {
         case "scale":
           notes = this.set_info.notes;
           break;
@@ -379,7 +390,7 @@ export default {
             return [];
           }
         default:
-          console.error("unknown mode: " + this.mode);
+          console.error("unknown mode: " + this.inputMode);
           notes = [];
       }
       return notes.map(Note.chroma);
@@ -391,7 +402,7 @@ export default {
     set_search: function () {
       let set;
       let searchTerm;
-      switch (this.mode) {
+      switch (this.inputMode) {
         case "scale":
           set = ALL_SCALES;
           searchTerm = this.scale.type.toLowerCase();
@@ -405,7 +416,7 @@ export default {
           searchTerm = this.forteNumber.toUpperCase();
           break;
         default:
-          console.error("unknown mode: " + this.mode);
+          console.error("unknown mode: " + this.inputMode);
           set = [];
       }
       return set.filter((option) => {
@@ -448,8 +459,8 @@ export default {
   },
 
   watch: {
-    mode: function () {
-      if (this.mode === "pc-set") {
+    inputMode: function () {
+      if (this.inputMode === "pc-set") {
         if (this.pcSet !== null && this.pcSet !== undefined) {
           this.pcSet = "9 0 4";
         }
@@ -457,7 +468,7 @@ export default {
     },
     pcSet: {
       handler: function () {
-        if (this.mode !== "pc-set") return;
+        if (this.inputMode !== "pc-set") return;
         if (!this.updatePostTonalData) return;
         this.updatePostTonalData = false;
         const address = Object.values(this.music21Chord.chordTablesAddress);

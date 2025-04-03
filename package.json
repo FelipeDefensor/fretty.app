@@ -14,7 +14,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.10",
     "@tonaljs/tonal": "^4.10.0",
     "buefy": "^0.9.22",
-    "chord-shapes": "^0.0.1",
+    "chord-shapes": "^0.0.2",
     "core-js": "^3.28.0",
     "music21j": "^0.16.7",
     "vue": "^2.7.14",

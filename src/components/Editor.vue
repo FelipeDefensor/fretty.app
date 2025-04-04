@@ -254,7 +254,24 @@
                         </div>
                       </b-field>
                     </b-field>
-                    <!-- <b-checkbox>Show piano</b-checkbox>-->
+                    <b-field label="Chord diagrams">
+                      <label class="checkbox checkbox-inline"
+                        ><span class="label is-small"
+                          >Show with doubled octaves</span
+                        >
+                        <input
+                          type="checkbox"
+                          v-model="chordShapesOptions.showDoublings"
+                        />
+                      </label>
+                    </b-field>
+                    <label class="checkbox checkbox-inline"
+                      ><span class="label is-small">Show inversions</span>
+                      <input
+                        type="checkbox"
+                        v-model="chordShapesOptions.showInversions"
+                      />
+                    </label>
                   </section>
                   <footer class="modal-card-foot">
                     <b-button
@@ -288,6 +305,7 @@
         :fretAmount="fretAmount"
         :onChordBoxHover="onChordboxHover"
         :onChordBoxLeave="onChordboxLeave"
+        :chordShapesOptions="chordShapesOptions"
       />
     </div>
   </div>
@@ -334,6 +352,10 @@ export default {
       forteNumber: "",
       updatePostTonalData: true,
       hoveredShape: null,
+      chordShapesOptions: {
+        showDoublings: false,
+        showInversions: true,
+      },
     };
   },
   computed: {
@@ -667,3 +689,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.checkbox-inline {
+  display: flex;
+}
+
+.checkbox-inline span {
+  margin-right: 10px;
+}
+</style>

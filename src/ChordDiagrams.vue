@@ -35,6 +35,7 @@ export default {
     fretAmount: Number,
     onChordBoxHover: Function,
     onChordBoxLeave: Function,
+    chordShapesOptions: Object,
   },
   computed: {
     shapes() {
@@ -46,7 +47,16 @@ export default {
           strings[i] += 12;
         }
       }
-      const shapes = getShapes(this.notes, strings, this.fretAmount, 4);
+      const shapes = getShapes(
+        this.notes,
+        strings,
+        this.fretAmount,
+        4,
+        12,
+        4,
+        this.chordShapesOptions.showDoublings,
+        !this.chordShapesOptions.showInversions ? [this.notes[0]] : null
+      );
       for (let shape of shapes) {
         shape["original"] = shape.frets;
         if (!shape.frets.every((x) => x == "x" || x <= 5)) {

@@ -15,7 +15,7 @@
         dominant-baseline="hanging"
         text-anchor="end"
       >
-        created with fretty.app
+        created with lutty 
       </text>
       -->
 

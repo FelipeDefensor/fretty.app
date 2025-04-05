@@ -4,7 +4,7 @@ An interactive fretboard exploration tool for all stringed instruments.
 
 Online version: [lutty.vercel.app](https://lutty.vercel.app/)
 
-<img width="100%" src="https://github.com/tfeldmann/fretty.app/raw/master/other/screenshot.png" alt="fretty.app screenshot">
+![image](https://github.com/user-attachments/assets/a11eaeac-192e-4054-bde0-531ce443ffef)
 
 ## Acknowledgments
 

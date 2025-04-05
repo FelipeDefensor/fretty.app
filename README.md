@@ -1,10 +1,14 @@
-# fretty.app
+# lutty
 
 An interactive fretboard exploration tool for all stringed instruments.
 
-Online version: [fretty.app](https://fretty-app.vercel.app/)
+Online version: [lutty.vercel.app](https://lutty.vercel.app/)
 
 <img width="100%" src="https://github.com/tfeldmann/fretty.app/raw/master/other/screenshot.png" alt="fretty.app screenshot">
+
+## Acknowledgments
+
+lutty is built on top of the excellent [fretty.app](https://github.com/tfeldmann/fretty.app) by Thomas Coenen and John Morrison. 
 
 ## Project setup
 ```
@@ -25,6 +29,3 @@ npm run build
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

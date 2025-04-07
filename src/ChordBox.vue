@@ -16,6 +16,8 @@ export default {
     index: Number,
     frets: Array,
     position: Number,
+    barres: Array,
+    numStrings: Number,
     onHover: Function,
     onLeave: Function,
   },
@@ -34,11 +36,12 @@ export default {
       const chordBox = new ChordBox(chordboxHtml, {
         showTuning: false,
         defaultColor: "black",
-        numStrings: this.frets.length,
+        numStrings: this.numStrings,
       });
       chordBox.draw({
         chord: this.frets,
         position: this.position,
+        barres: this.barres,
       });
     },
   },

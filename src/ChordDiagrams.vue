@@ -17,6 +17,8 @@
       :index="index"
       :frets="shape.frets"
       :position="shape.position"
+      :barres="shape.barres"
+      :numStrings="tuning.length"
       :onHover="handleChordBoxHover"
       :onLeave="onChordBoxLeave"
     />
@@ -47,7 +49,7 @@ export default {
           strings[i] += 12;
         }
       }
-      const shapes = getShapes(
+      let shapes = getShapes(
         this.notes,
         strings,
         this.fretAmount,
@@ -57,26 +59,52 @@ export default {
         this.chordShapesOptions.showDoublings,
         !this.chordShapesOptions.showInversions ? [this.notes[0]] : null
       );
-      for (let shape of shapes) {
+      for (let j = 0; j < shapes.length; j++) {
+        const shape = shapes[j];
         shape["original"] = shape.frets;
         if (!shape.frets.every((x) => x == "x" || x <= 5)) {
+          // first fret to be displayed
           const position = Math.min(
             ...shape.frets.filter((x) => x != "x" && x != 0)
           );
           shape.frets = shape.frets.map((x) =>
             x == "x" || x == 0 ? x : x - position + 1
           );
+          shape.barres = shape.barres.map((x) => ({
+            ...x,
+            fret: x.fret - position + 1,
+          }));
           shape["position"] = position;
         } else {
           shape["position"] = 0;
         }
 
-        // @chordbook/charts requires the fret order to be inverted
         const frets = [];
         for (let i = 0; i < numStrings; i++) {
-          frets.push([i + 1, shape.frets[shape.frets.length - 1 - i]]);
+          let remove = false;
+          // do not display circles if
+          // fret is part of barre
+          for (let barre of shape.barres) {
+            remove |=
+              barre.fret == shape.frets[i] &&
+              i + 1 >= barre.fromString &&
+              i + 1 <= barre.toString;
+          }
+          if (!remove) {
+            const fret = shape.frets[i];
+            // frets must 1-indexed and pushed in reverse order
+            // due to how @chordbook/charts works
+            frets.push([shape.frets.length - i, fret]);
+          }
         }
-        shape["frets"] = frets;
+
+        // barres must be reflected due to how @chordbook/charts works
+        const barres = shape.barres.map((x) => ({
+          fret: x.fret,
+          fromString: numStrings - x.fromString + 1,
+          toString: numStrings - x.toString + 1,
+        }));
+        shapes[j] = { ...shapes[j], frets, barres };
       }
       return shapes;
     },
